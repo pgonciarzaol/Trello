@@ -12,7 +12,3 @@ Feature: Login in to Trello website
     And I fill in password with registered password
     When I click on log in button
     Then I am logged into Trello
-
-
-
-

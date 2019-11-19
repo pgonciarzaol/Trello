@@ -1,0 +1,132 @@
+1.You are selected as a QA to a new project the in company. The client behind the project is very dissatisfied with the quality of the application delivered by the previous software company. Netguru was chosen as a new software house to improve the quality of the application. The project faces problems such as: multiple bugs (also on production), poor UX and performance issues. All those defects make the application very unattractive for users.     
+What steps would you take to improve the quality of the app?
+What kind of tools, processes, documentation you would introduce?
+Please refer to both your previous experience and general QA knowledge and give examples.
+
+Answer 1
+
+First I would ask customer if there is a documentation of those multiple bugs that are mentioned. If there is none - then, after getting acquainted with requirements specification I would spend some time doing exploratory testing and documenting bugs. 
+Also if there are some testing scenarios from our predecessors I would review them and run myself. Once I have bugs documentation (in Jira, Youtrack or other), than I would separate bugs that concerns UX,  performance, and other (application logic mostly) and I would ask development team to fix them.
+Next I would take bugs that refer to UX to UX team to address them as well as general poor UX. When they come up with proposed changes to application frontend, than I will check if all of UX bugs were addressed in this project. If so, then this project should be added to production. If not, then those bugs that are left should be sent to be repaired as well.
+As for performance issues if this is a web project, than I would use chrome dev tools and Performance tab, and Network tab to track performance issue details. One could also use Jmeter. If the project is a mobile application, than I will write a performance tests myself using Appium. I made similar test in past, when I was working on Satel mobile apps. There was an issue with login time to security central in users home. My test was login in a loop to three different centrals 24/7. This test was very stable and other than electricity blackout there was nothing that could stop it. Anyway, the test was uploading results to an FTP server, so all the data was accessible to developers, so they could check in real time, what impact does the changes they make have. 
+
+While the development team is busy with fixing bugs and implementing UX changes, I would use requirements specification and read test scenarios to supplement test coverage with new scenarios. If our company is the one to develop the application further I would start to automate them using tools relevant to type of the project.
+
+After any bug is getting fixed I would do a retest and some regression tests.
+After UX changes are done I would do a retests, regression tests and a lot of exploratory testing. I would also look for some third party testers, ask some colleagues to use this app and get back to me with their remarks regarding user experience.
+
+For future development, to ensure reliable product quality I would introduce Test Driven Development. I would phrase future tasks into user stories and convert them to tests with the help of Cucumber.Obviously, the automated tests would be a part of CI/CD (Jenkins).
+
+3. Imagine you are responsible for testing a web application. Your team is preparing a release of a new feature. Just before the release you spot a bug. What next steps you would take to resolve the situation. Take into consideration different scenarios and circumstances. 
+
+Answer 2
+
+If the repair was obviously simple and not particularly time consuming I would ask one of the programists to make a hot fix. 
+If that is not the case, than there are many things one needs to take into consideration. Regardless of circumstances I would surely let the product owner know about the situation ASAP. 
+Next I would provide him with documentation (reproduction steps, screenshots etc.), and my assessment of severity and priority of this bug. I believe that from this moment on it is his competence to decide what and if anything should the development team do about it. It is he who knows best what are the priorities of the customer. But lets for the sake of argument consider that I am also a Product owner of this project.
+
+If the bug is an obvious show-stopper, than we stop the show. For example if this is a banking app and the bug will not let the user to log into it or transfer money than we need to stop the release until it will be fixed retested and regression tests will be done. 
+
+If it is a minor bug and it is located in peripheral option of the app we try to fix it, but if we run out of time, than we leave it for next sprint to be fixed and we proceed with the release. For example if in this banking app our bug won’t let us use polish signs in the address text box.  
+
+There is also a possibility that the bug is hard to fix, but can be eliminated removing some unnecessary feature for this release, than we temporarily remove this feature.
+
+To summarize, I consider that in such situation testers foremost responsibility is to provide product owner with as much information about the bug as possible.
+
+
+
+
+2. Imagine a web application with a simple registration and login form (you may use Trello as a reference). Your task is to construct a feature test scenario for the following stories:     
+As a new user, I would like to register my account
+As a user I would like to log in my account with my e-mail and password.
+Remember to take into consideration all possible contexts, validation of credentials, fields and expected flash messages.     
+Out of the test scenarios that you prepared, automate 2 of them and provide us with their ready-to-run versions on repository of your choice (github, bitbucket etc). Please remember about including step by step instruction how to configure them in readme file.
+
+
+Answer 3
+
+
+Feature: Login in to Trello website
+  Scenario: As a registered user I want to try log into Trello website using unregistered password with correct email. I expect to see "Invalid password notification"
+    Given I enter log in page of Trello
+    And I fill in login text box with registered login
+    And I fill in password with incorrect password
+    When I click on log in button
+    Then I can see invalid password notification
+
+  Scenario: As a registered user I want to log into Trello website in order to use most of it's offerings
+    Given I enter log in page of Trello
+    And I fill in login text box with registered login
+    And I fill in password with registered password
+    When I click on log in button
+    Then I am logged into Trello
+
+  Scenario: As a user I want to successfully sign up for a Trello account
+    Given I enter sign up page of Trello
+    And I fill in email text box with a  correct email address
+    And I click continue button
+    When I can see Sign up for your account page
+    And I fill password text box with correct password
+    And I click sign up button
+    Then I can see Check your inbox to finish signup page
+    And I receive confirmation link in email from Trello
+
+  Scenario: As a newly registered user I want to activate my account with link provided in email
+    Given I received email from trello
+    When I opened url sent to me in email from Trello
+    Then I can see Welcome to Trello! page
+
+  Scenario: As a registered user I want to try to log in with wrong username address to Trello site
+    Given I enter log in page of Trello
+    And I fill in password with correct password
+    And I fill in incorrect username
+    When I click on log in button
+    Then I can see 'There isn't an account for this username' sign
+
+  Scenario: As a registered user I want to try to log in with wrong password to Trello site
+    Given I enter log in page of Trello
+    And I fill in password with incorrect password
+    And I fill in correct username
+    When I click on log in button
+    Then I can see 'Invalid password ' sign
+
+  Scenario: As a registered user I want to try to log in with wrong email to Trello site
+    Given I enter log in page of Trello
+    And I fill in password with correct password
+    And I fill in incorrect username
+    When I click on log in button
+    Then I can see 'There isn't an account for this email ' sign
+
+  Scenario: As a registered user I want  to log in with Google account to Trello site
+    Given I enter log in page of Trello
+    And I click 'Log in with Google' button
+    When I choose registered google account
+    Then I am logged into Trello
+
+  Scenario: As a not registered user I want to try to log in with Google account to Trello site
+    Given I enter log in page of Trello
+    And I click 'Log in with Google' button
+    When I choose not registered google account
+    Then I can see page with button to create Trello account
+
+  Scenario As a user I want to try to sign up with email address that misses at sign
+    Given I enter sign up page of Trello
+    And I fill username 'piotrgonciarz'
+    When I can continue button with tag 'disabled'
+
+  Scenario As a user I want to try to sign up using password that's less than 8 characters
+    Given I enter sign up page of Trello
+    And I fill in email text box with a  correct email address
+    And I click continue button
+    When I fill in full name text box with 'Piotr Gonciarz'
+    And I fill in password with password 'asdasds'
+    Then I can see 'Password must be at least 8 characters' notification
+
+  Scenario: As a user I want to try to sign up with corrupted email address
+    Given I enter sign up page of Trello
+    And I fill in email text box with a  correct email address
+    And I click continue button
+    When I fill in full name text box with 'Piotr Gonciarz'
+    And I fill in password with password 'asdasdsss'
+    And I change email address to 'fafafaf@fsf'
+    Then I can see 'It doesn't look like fsf can receive email…' notification
